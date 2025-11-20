@@ -374,39 +374,29 @@ footer { text-align:center; padding:40px 0 20px; font-size:13px; color:rgba(255,
     <!-- 後測題目 -->
     <div id="post-likert-container"></div>
     
-    <div class="sub-group-card" style="margin-top: 24px;">
-        <h3>Kolb 反思與開放回饋</h3>
-        <label>14. 本次講座帶給我最重要的啟發是？</label>
-        <textarea id="post-open-1" rows="2" placeholder="請輸入..."></textarea>
-
-        <label style="margin-top: 16px;">15. 我最有感的情境或故事是？</label>
-        <textarea id="post-open-2" rows="2" placeholder="請輸入..."></textarea>
-        
-        <label style="margin-top: 16px;">16. 我計畫如何運用今天的收穫？（具體行動）</label>
-        <textarea id="post-open-3" rows="2" placeholder="請輸入..."></textarea>
-
-        <label style="margin-top: 16px;">17. 未來希望增加哪些內容？</label>
-        <textarea id="post-open-4" rows="2" placeholder="請輸入..."></textarea>
-    </div>
+    <!-- 原後測開放式問題已移除並合併至下方 -->
   </div>
 
   <div class="card">
-    <div class="section-title">第二部分：滿意度問卷 (Satisfaction)</div>
+    <div class="section-title">第二部分：滿意度與綜合回饋 (Satisfaction)</div>
     <p class="note">請給予我們回饋 (1=非常不滿意, 5=非常滿意)</p>
     
     <!-- 滿意度題目 -->
     <div id="sat-likert-container"></div>
     
     <div class="sub-group-card" style="margin-top: 24px;">
-        <h3>建議與改善</h3>
-        <label>13. 本次講座最有價值的部分是？</label>
+        <h3>綜合開放式回饋</h3>
+        <label>13. 本次講座讓您最有收穫或最有感的部分是？</label>
         <textarea id="sat-open-1" rows="2" placeholder="請輸入..."></textarea>
 
-        <label style="margin-top: 16px;">14. 活動有哪些地方可改善？</label>
+        <label style="margin-top: 16px;">14. 我計畫如何運用今天的收穫？（具體行動）</label>
         <textarea id="sat-open-2" rows="2" placeholder="請輸入..."></textarea>
 
-        <label style="margin-top: 16px;">15. 希望未來 Faculty Club 加入哪些主題？</label>
+        <label style="margin-top: 16px;">15. 活動有哪些地方可改善？</label>
         <textarea id="sat-open-3" rows="2" placeholder="請輸入..."></textarea>
+
+        <label style="margin-top: 16px;">16. 未來希望 Faculty Club 增加哪些主題？</label>
+        <textarea id="sat-open-4" rows="2" placeholder="請輸入..."></textarea>
     </div>
   </div>
     
@@ -576,7 +566,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ---------------------------------- */
 /* 提交邏輯 */
 /* ---------------------------------- */
-// 使用您提供的新網址
+// Faculty Club 的 GAS 網址
 const DEPLOYED_URL = "https://script.google.com/macros/s/AKfycbw1PDWM2AexPX5Kv0k_MY0bZvmGnPTC1HbDo4f1KmolUIZKAaZ2oAVUR2I-IPP1IAHs/exec";
 
 function getRadioValue(name) {
@@ -642,12 +632,7 @@ async function submitCombinedSurvey() {
             payload[`post_${qNum}`] = getRadioValue(`post_${qNum}`);
         });
     });
-    // 收集後測 Open (14-17)
-    payload[`open_post_1`] = document.getElementById("post-open-1").value.replace(/\n/g, " ");
-    payload[`open_post_2`] = document.getElementById("post-open-2").value.replace(/\n/g, " ");
-    payload[`open_post_3`] = document.getElementById("post-open-3").value.replace(/\n/g, " ");
-    payload[`open_post_4`] = document.getElementById("post-open-4").value.replace(/\n/g, " ");
-
+    
     // 收集滿意度 Likert (sat_1 ~ sat_12)
     SATISFACTION_GROUPS.forEach(group => {
         group.items.forEach((_, idx) => {
@@ -655,10 +640,12 @@ async function submitCombinedSurvey() {
             payload[`sat_${qNum}`] = getRadioValue(`sat_${qNum}`);
         });
     });
-    // 收集滿意度 Open (13-15)
+    
+    // 收集綜合開放式回饋 (13-16)
     payload[`open_sat_1`] = document.getElementById("sat-open-1").value.replace(/\n/g, " ");
     payload[`open_sat_2`] = document.getElementById("sat-open-2").value.replace(/\n/g, " ");
     payload[`open_sat_3`] = document.getElementById("sat-open-3").value.replace(/\n/g, " ");
+    payload[`open_sat_4`] = document.getElementById("sat-open-4").value.replace(/\n/g, " ");
 
     console.log("Sending:", payload);
 
